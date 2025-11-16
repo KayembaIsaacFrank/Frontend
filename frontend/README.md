@@ -47,6 +47,3 @@ npm run build
 
 This project uses **Bootstrap** and **Material UI (MUI)** for styling and components. Bootstrap provides the base CSS and responsive layout; MUI provides component primitives for richer UI elements.
 
-Notes:
-- Tailwind CSS has been removed from the dependency list and is no longer used.
-- Global Bootstrap CSS is imported in `src/main.jsx`.
