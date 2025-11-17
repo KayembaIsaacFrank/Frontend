@@ -51,10 +51,10 @@ const Login = () => {
                     <option value="Manager">Manager</option>
                     <option value="Sales Agent">Sales Agent</option>
                   </select>
-                  <div className="form-text">
+                  {/* <div className="form-text">
                     <span className="text-muted">Are you a buyer? </span>
                     <a href="/buyer-signup">Sign up here</a> or <a href="/login-buyer">login as buyer</a>.
-                  </div>
+                  </div> */}
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Email</label>
@@ -74,10 +74,7 @@ const Login = () => {
               </form>
 
               <p className="text-center mt-3">
-                No account? <a href="/ceo-signup">CEO Signup</a> | <a href="/buyer-signup">Buyer Signup</a>
-              </p>
-              <p className="text-center mt-1">
-                <span className="text-muted">Buyers must use the Buyer Signup/Login links above.</span>
+                No account? <a href="/ceo-signup">CEO Signup</a>
               </p>
             </div>
           </div>

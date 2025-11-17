@@ -19,6 +19,8 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
+
+
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <Link className="nav-link" to="/dashboard">Dashboard</Link>
@@ -53,6 +55,7 @@ const Navbar = () => {
           </ul>
 
           <div className="d-flex align-items-center">
+            <Link to="/settings" className="btn btn-outline-light me-2">Settings</Link>
             <div className="me-3 text-white">{user?.full_name} <small className="text-light">({user?.role})</small></div>
             <button onClick={handleLogout} className="btn btn-danger">Logout</button>
           </div>

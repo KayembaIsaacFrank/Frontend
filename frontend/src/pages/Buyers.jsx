@@ -115,4 +115,4 @@ const Buyers = () => {
   );
 };
 
-export default Buyers;
+// Buyers page removed

@@ -64,4 +64,4 @@ const LoginBuyer = () => {
   );
 };
 
-export default LoginBuyer;
+// LoginBuyer removed

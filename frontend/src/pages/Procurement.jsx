@@ -10,9 +10,24 @@ const Procurement = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const allowedProduce = [
+    'beans',
+    'grain maize',
+    'cowpeas',
+    'groundnuts',
+    'rice',
+    'soybeans',
+  ];
+  const allowedSources = [
+    { value: 'individual', label: 'Individual Dealer' },
+    { value: 'company', label: 'Company' },
+    { value: 'maganjo', label: 'Maganjo Farm' },
+    { value: 'matugga', label: 'Matugga Farm' },
+  ];
   const [form, setForm] = useState({
     branch_id: '',
     produce_id: '',
+    source: '',
     dealer_name: '',
     dealer_phone: '',
     tonnage: '',
@@ -54,13 +69,29 @@ const Procurement = () => {
 
   const submit = async (e) => {
     e.preventDefault();
+    // Enforce allowed produce types (frontend)
+    const selectedProduce = produce.find(p => String(p.id) === String(form.produce_id));
+    if (!selectedProduce || !allowedProduce.includes(selectedProduce.name)) {
+      setError('Produce type not allowed');
+      return;
+    }
+    // Enforce minimum 1 ton
+    if (parseFloat(form.tonnage) < 1) {
+      setError('Minimum procurement is 1 ton');
+      return;
+    }
+    // Enforce allowed sources
+    if (!form.source || !allowedSources.some(s => s.value === form.source)) {
+      setError('Select a valid source');
+      return;
+    }
     try {
       setLoading(true);
       setError('');
       const payload = {
         branch_id: Number(form.branch_id),
         produce_id: Number(form.produce_id),
-        dealer_name: form.dealer_name || undefined,
+        dealer_name: form.source, // send source as dealer_name for backend check
         dealer_phone: form.dealer_phone || undefined,
         tonnage: Number(form.tonnage),
         cost_per_ton: Number(form.cost_per_ton),
@@ -103,7 +134,9 @@ const Procurement = () => {
                   <label className="form-label">Produce</label>
                   <select className="form-select" value={form.produce_id} onChange={(e)=>setForm(f=>({...f, produce_id:e.target.value}))} required>
                     <option value="">Select produce</option>
-                    {produce.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                    {produce.filter(p => allowedProduce.includes(p.name)).map(p => (
+                      <option key={p.id} value={p.id}>{p.name}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-12 col-md-3">
@@ -119,8 +152,13 @@ const Procurement = () => {
                   <input type="number" step="0.01" className="form-control" value={form.selling_price_per_ton} onChange={(e)=>setForm(f=>({...f, selling_price_per_ton:e.target.value}))} required />
                 </div>
                 <div className="col-12 col-md-3">
-                  <label className="form-label">Dealer Name</label>
-                  <input className="form-control" value={form.dealer_name} onChange={(e)=>setForm(f=>({...f, dealer_name:e.target.value}))} />
+                  <label className="form-label">Source</label>
+                  <select className="form-select" value={form.source} onChange={e=>setForm(f=>({...f, source:e.target.value}))} required>
+                    <option value="">Select source</option>
+                    {allowedSources.map(s => (
+                      <option key={s.value} value={s.value}>{s.label}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="col-12 col-md-3">
                   <label className="form-label">Dealer Phone</label>

@@ -4,11 +4,12 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ManagerDashboard from './pages/ManagerDashboard';
 import SalesAgentDashboard from './pages/SalesAgentDashboard';
-import BuyerDashboard from './pages/BuyerDashboard';
 
 // Pages
 import Login from './pages/Login';
 import CEOSignup from './pages/CEOSignup';
+import ManagerSignup from './pages/ManagerSignup';
+import SalesAgentSignup from './pages/SalesAgentSignup';
 import Dashboard from './pages/Dashboard';
 import Procurement from './pages/Procurement';
 import Sales from './pages/Sales';
@@ -16,12 +17,14 @@ import CreditSales from './pages/CreditSales';
 import Stock from './pages/Stock';
 import Analytics from './pages/Analytics';
 import Reports from './pages/Reports';
-import Buyers from './pages/Buyers';
+// import Buyers from './pages/Buyers';
 import Users from './pages/Users';
 import Unauthorized from './pages/Unauthorized';
-import BuyerSignup from './pages/BuyerSignup';
-import LoginBuyer from './pages/LoginBuyer';
+// import BuyerSignup from './pages/BuyerSignup';
+// import LoginBuyer from './pages/LoginBuyer';
 
+
+import Settings from './pages/Settings';
 import './index.css';
 
 // Role-based dashboard component
@@ -33,8 +36,6 @@ function RoleBasedDashboard() {
       return <ManagerDashboard />;
     case 'sales_agent':
       return <SalesAgentDashboard />;
-    case 'buyer':
-      return <BuyerDashboard />;
     default:
       return <Dashboard />;
   }
@@ -48,8 +49,10 @@ function App() {
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/ceo-signup" element={<CEOSignup />} />
-          <Route path="/buyer-signup" element={<BuyerSignup />} />
-          <Route path="/login-buyer" element={<LoginBuyer />} />
+          <Route path="/manager-signup" element={<ManagerSignup />} />
+          <Route path="/sales-agent-signup" element={<SalesAgentSignup />} />
+          {/* <Route path="/buyer-signup" element={<BuyerSignup />} /> */}
+          {/* <Route path="/login-buyer" element={<LoginBuyer />} /> */}
           
           {/* Protected routes */}
           <Route
@@ -115,14 +118,14 @@ function App() {
             }
           />
           
-          <Route
+          {/* <Route
             path="/buyers"
             element={
               <ProtectedRoute>
                 <Buyers />
               </ProtectedRoute>
             }
-          />
+          /> */}
           
           <Route
             path="/users"
@@ -135,6 +138,16 @@ function App() {
           
           <Route path="/unauthorized" element={<Unauthorized />} />
           
+          {/* Settings page for all authenticated users */}
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Default redirect */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>

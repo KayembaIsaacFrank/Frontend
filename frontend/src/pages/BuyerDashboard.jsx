@@ -13,4 +13,4 @@ const BuyerDashboard = () => {
   );
 };
 
-export default BuyerDashboard;
+// BuyerDashboard removed

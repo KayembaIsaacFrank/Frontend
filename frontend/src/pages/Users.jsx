@@ -148,10 +148,18 @@ const Users = () => {
                       <label className="form-label">Branch</label>
                       <select className="form-select" value={mgrForm.branch_id} onChange={(e)=>setMgrForm(f=>({...f, branch_id:e.target.value}))} required>
                         <option value="">Select branch</option>
-                        {branches.map(b => (
-                          <option key={b.id} value={b.id}>{b.name}</option>
-                        ))}
+                        {branches.map(b => {
+                          const hasManager = managers.some(m => m.branch && m.branch.id === b.id);
+                          return (
+                            <option key={b.id} value={b.id} disabled={hasManager}>
+                              {b.name}{hasManager ? ' (Managed)' : ''}
+                            </option>
+                          );
+                        })}
                       </select>
+                      {branches.every(b => managers.some(m => m.branch && m.branch.id === b.id)) && (
+                        <div className="text-danger small mt-1">All branches already have a manager.</div>
+                      )}
                     </div>
                     <div className="col-12 d-flex align-items-end">
                       <button className="btn btn-primary" type="submit" disabled={creating}>
@@ -217,6 +225,11 @@ const Users = () => {
             </div>
           </div>
 
+          {/* You can add agent creation form here if needed, with similar logic:
+              - Only show branches with <2 agents
+              - Disable button if limit reached
+              - Show a note if all branches have 2 agents
+          */}
           <div className="col-12 col-lg-6">
             <div className="card">
               <div className="card-header">Sales Agents</div>
@@ -264,6 +277,10 @@ const Users = () => {
                     </tbody>
                   </table>
                 </div>
+                {/* Show a note if all branches have 2 agents */}
+                {branches.length > 0 && branches.every(b => agents.filter(a => a.branch && a.branch.id === b.id).length >= 2) && (
+                  <div className="text-danger small m-3">All branches already have two sales agents.</div>
+                )}
               </div>
             </div>
           </div>

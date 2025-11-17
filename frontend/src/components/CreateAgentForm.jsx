@@ -7,11 +7,9 @@ const CreateAgentForm = ({ branchId, onCreated }) => {
     email: '',
     phone: '',
     password: '',
-    confirm_password: '',
     branch_id: branchId || '',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -22,10 +20,6 @@ const CreateAgentForm = ({ branchId, onCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (form.password !== form.confirm_password) {
-      setError('Passwords do not match');
-      return;
-    }
     setLoading(true);
     try {
       // Always use branchId prop if provided (manager context)
@@ -34,7 +28,7 @@ const CreateAgentForm = ({ branchId, onCreated }) => {
         branch_id: branchId ? Number(branchId) : Number(form.branch_id)
       };
       await api.post('/auth/create-agent', payload);
-      setForm({ full_name: '', email: '', phone: '', password: '', confirm_password: '', branch_id: branchId || '' });
+      setForm({ full_name: '', email: '', phone: '', password: '', branch_id: branchId || '' });
       if (onCreated) onCreated();
     } catch (err) {
       setError(err?.response?.data?.error || 'Failed to create agent');
@@ -66,13 +60,7 @@ const CreateAgentForm = ({ branchId, onCreated }) => {
             <button type="button" className="btn btn-outline-secondary" tabIndex="-1" onClick={() => setShowPassword(v => !v)}>{showPassword ? 'Hide' : 'Show'}</button>
           </div>
         </div>
-        <div className="col-12 col-md-4">
-          <label className="form-label">Confirm Password</label>
-          <div className="input-group">
-            <input type={showConfirm ? 'text' : 'password'} className="form-control" name="confirm_password" value={form.confirm_password} onChange={handleChange} required />
-            <button type="button" className="btn btn-outline-secondary" tabIndex="-1" onClick={() => setShowConfirm(v => !v)}>{showConfirm ? 'Hide' : 'Show'}</button>
-          </div>
-        </div>
+        {/* Confirm Password removed */}
         {/* Hide branch_id input if passed as prop (manager context) */}
         {!branchId && (
           <div className="col-12 col-md-4">
