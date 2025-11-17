@@ -1,7 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import ManagerDashboard from './pages/ManagerDashboard';
+import SalesAgentDashboard from './pages/SalesAgentDashboard';
+import BuyerDashboard from './pages/BuyerDashboard';
 
 // Pages
 import Login from './pages/Login';
@@ -16,8 +19,25 @@ import Reports from './pages/Reports';
 import Buyers from './pages/Buyers';
 import Users from './pages/Users';
 import Unauthorized from './pages/Unauthorized';
+import BuyerSignup from './pages/BuyerSignup';
 
 import './index.css';
+
+// Role-based dashboard component
+function RoleBasedDashboard() {
+  const { user } = useAuth();
+  if (!user) return <Dashboard />;
+  switch (user.role) {
+    case 'manager':
+      return <ManagerDashboard />;
+    case 'sales_agent':
+      return <SalesAgentDashboard />;
+    case 'buyer':
+      return <BuyerDashboard />;
+    default:
+      return <Dashboard />;
+  }
+}
 
 function App() {
   return (
@@ -27,13 +47,14 @@ function App() {
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/ceo-signup" element={<CEOSignup />} />
+          <Route path="/buyer-signup" element={<BuyerSignup />} />
           
           {/* Protected routes */}
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <RoleBasedDashboard />
               </ProtectedRoute>
             }
           />

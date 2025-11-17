@@ -8,6 +8,7 @@ const Login = () => {
   const [role, setRole] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -55,10 +56,12 @@ const Login = () => {
                   <label className="form-label">Email</label>
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control" required />
                 </div>
-
                 <div className="mb-3">
                   <label className="form-label">Password</label>
-                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" required />
+                  <div className="input-group">
+                    <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" required />
+                    <button type="button" className="btn btn-outline-secondary" tabIndex="-1" onClick={() => setShowPassword(v => !v)}>{showPassword ? 'Hide' : 'Show'}</button>
+                  </div>
                 </div>
 
                 <button type="submit" disabled={loading} className="btn btn-primary w-100">
@@ -67,7 +70,7 @@ const Login = () => {
               </form>
 
               <p className="text-center mt-3">
-                No account? <a href="/ceo-signup">CEO Signup</a>
+                No account? <a href="/ceo-signup">CEO Signup</a> | <a href="/buyer-signup">Buyer Signup</a>
               </p>
             </div>
           </div>
