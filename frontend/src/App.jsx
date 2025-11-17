@@ -20,6 +20,7 @@ import Buyers from './pages/Buyers';
 import Users from './pages/Users';
 import Unauthorized from './pages/Unauthorized';
 import BuyerSignup from './pages/BuyerSignup';
+import LoginBuyer from './pages/LoginBuyer';
 
 import './index.css';
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/ceo-signup" element={<CEOSignup />} />
           <Route path="/buyer-signup" element={<BuyerSignup />} />
+          <Route path="/login-buyer" element={<LoginBuyer />} />
           
           {/* Protected routes */}
           <Route

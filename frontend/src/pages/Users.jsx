@@ -12,10 +12,13 @@ const Users = () => {
   const [mgrForm, setMgrForm] = useState({
     email: '',
     password: '',
+    confirm_password: '',
     full_name: '',
     phone: '',
     branch_id: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [creating, setCreating] = useState(false);
 
   const loadData = async () => {
@@ -64,17 +67,22 @@ const Users = () => {
                   onSubmit={async (e) => {
                     e.preventDefault();
                     setError('');
+                    if (mgrForm.password !== mgrForm.confirm_password) {
+                      setError('Passwords do not match');
+                      return;
+                    }
                     setCreating(true);
                     try {
                       const payload = {
                         email: mgrForm.email,
                         password: mgrForm.password,
+                        confirm_password: mgrForm.confirm_password,
                         full_name: mgrForm.full_name,
                         phone: mgrForm.phone,
                         branch_id: mgrForm.branch_id ? Number(mgrForm.branch_id) : undefined,
                       };
                       await api.post('/auth/create-manager', payload);
-                      setMgrForm({ email: '', password: '', full_name: '', phone: '', branch_id: '' });
+                      setMgrForm({ email: '', password: '', confirm_password: '', full_name: '', phone: '', branch_id: '' });
                       await loadData();
                     } catch (er) {
                       setError(er?.response?.data?.error || 'Failed to create manager');
@@ -98,7 +106,43 @@ const Users = () => {
                     </div>
                     <div className="col-12 col-md-3">
                       <label className="form-label">Password</label>
-                      <input type="password" className="form-control" value={mgrForm.password} onChange={(e)=>setMgrForm(f=>({...f, password:e.target.value}))} required />
+                      <div className="input-group">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          className="form-control"
+                          value={mgrForm.password}
+                          onChange={e => setMgrForm(f => ({ ...f, password: e.target.value }))}
+                          required
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-outline-secondary"
+                          tabIndex="-1"
+                          onClick={() => setShowPassword(v => !v)}
+                        >
+                          {showPassword ? 'Hide' : 'Show'}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-3">
+                      <label className="form-label">Confirm Password</label>
+                      <div className="input-group">
+                        <input
+                          type={showConfirm ? 'text' : 'password'}
+                          className="form-control"
+                          value={mgrForm.confirm_password}
+                          onChange={e => setMgrForm(f => ({ ...f, confirm_password: e.target.value }))}
+                          required
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-outline-secondary"
+                          tabIndex="-1"
+                          onClick={() => setShowConfirm(v => !v)}
+                        >
+                          {showConfirm ? 'Hide' : 'Show'}
+                        </button>
+                      </div>
                     </div>
                     <div className="col-12 col-md-3">
                       <label className="form-label">Branch</label>
@@ -134,12 +178,13 @@ const Users = () => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Branch</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {managers.length === 0 && (
                         <tr>
-                          <td colSpan="4" className="text-center text-muted">No managers yet</td>
+                          <td colSpan="5" className="text-center text-muted">No managers yet</td>
                         </tr>
                       )}
                       {managers.map((m, idx) => (
@@ -148,6 +193,21 @@ const Users = () => {
                           <td>{m.full_name}</td>
                           <td>{m.email}</td>
                           <td>{m.branch ? m.branch.name : '-'}</td>
+                          <td>
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={async () => {
+                                if (window.confirm(`Remove manager ${m.full_name}?`)) {
+                                  try {
+                                    await api.delete(`/users/managers/${m.id}`);
+                                    await loadData();
+                                  } catch (err) {
+                                    setError(err?.response?.data?.error || 'Failed to remove manager');
+                                  }
+                                }
+                              }}
+                            >Remove</button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -169,12 +229,13 @@ const Users = () => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Branch</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {agents.length === 0 && (
                         <tr>
-                          <td colSpan="4" className="text-center text-muted">No agents yet</td>
+                          <td colSpan="5" className="text-center text-muted">No agents yet</td>
                         </tr>
                       )}
                       {agents.map((a, idx) => (
@@ -183,6 +244,21 @@ const Users = () => {
                           <td>{a.full_name}</td>
                           <td>{a.email}</td>
                           <td>{a.branch ? a.branch.name : '-'}</td>
+                          <td>
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={async () => {
+                                if (window.confirm(`Remove sales agent ${a.full_name}?`)) {
+                                  try {
+                                    await api.delete(`/users/agents/${a.id}`);
+                                    await loadData();
+                                  } catch (err) {
+                                    setError(err?.response?.data?.error || 'Failed to remove sales agent');
+                                  }
+                                }
+                              }}
+                            >Remove</button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
