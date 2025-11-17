@@ -1,3 +1,6 @@
+// Set default theme to dark
+document.body.setAttribute('data-theme', 'dark');
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'

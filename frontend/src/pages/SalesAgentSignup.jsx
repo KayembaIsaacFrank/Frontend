@@ -12,6 +12,7 @@ const SalesAgentSignup = () => {
     branch_id: '',
   });
   const [branches, setBranches] = useState([]);
+  const [agentsAll, setAgentsAll] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +20,27 @@ const SalesAgentSignup = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get('/branches').then(res => setBranches(res.data || [])).catch(() => setBranches([]));
+    const run = async () => {
+      try {
+        // Fetch branches (public)
+        const br = await api.get('/branches');
+        setBranches(br.data || []);
+        
+        // Try to fetch agents for validation (may fail if not authenticated)
+        try {
+          const ag = await api.get('/users/agents');
+          setAgentsAll(ag.data || []);
+        } catch {
+          // Ignore error - backend will validate on signup
+          setAgentsAll([]);
+        }
+      } catch (err) {
+        console.error('Failed to load branches:', err);
+        setBranches([]);
+        setAgentsAll([]);
+      }
+    };
+    run();
   }, []);
 
   const handleChange = (e) => {
@@ -71,7 +92,11 @@ const SalesAgentSignup = () => {
                   <label className="form-label">Branch</label>
                   <select className="form-select" name="branch_id" value={form.branch_id} onChange={handleChange} required>
                     <option value="">Select branch</option>
-                    {branches.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+                    {branches
+                      .filter(b => (agentsAll.filter(a => a.branch && a.branch.id === b.id).length < 2))
+                      .map(b => (
+                        <option key={b.id} value={`${b.id}`}>{b.name} - {b.location}</option>
+                      ))}
                   </select>
                 </div>
                 <div className="mb-3">

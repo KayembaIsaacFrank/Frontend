@@ -25,7 +25,7 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/dashboard">Dashboard</Link>
             </li>
-            {user?.role !== 'CEO' && (
+            {user?.role === 'Sales Agent' && (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" to="/procurement">Procurement</Link>

@@ -12,6 +12,7 @@ const ManagerSignup = () => {
     branch_id: '',
   });
   const [branches, setBranches] = useState([]);
+  const [managers, setManagers] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +20,27 @@ const ManagerSignup = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get('/branches').then(res => setBranches(res.data || [])).catch(() => setBranches([]));
+    const run = async () => {
+      try {
+        // Fetch branches (public)
+        const br = await api.get('/branches');
+        setBranches(br.data || []);
+        
+        // Try to fetch managers for validation (may fail if not authenticated)
+        try {
+          const mgr = await api.get('/users/managers');
+          setManagers(mgr.data || []);
+        } catch {
+          // Ignore error - backend will validate on signup
+          setManagers([]);
+        }
+      } catch (err) {
+        console.error('Failed to load branches:', err);
+        setBranches([]);
+        setManagers([]);
+      }
+    };
+    run();
   }, []);
 
   const handleChange = (e) => {
@@ -71,7 +92,14 @@ const ManagerSignup = () => {
                   <label className="form-label">Branch</label>
                   <select className="form-select" name="branch_id" value={form.branch_id} onChange={handleChange} required>
                     <option value="">Select branch</option>
-                    {branches.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+                    {branches.map(b => {
+                      const hasManager = managers.some(m => m.branch && m.branch.id === b.id);
+                      return (
+                        <option key={b.id} value={`${b.id}`} disabled={hasManager}>
+                          {b.name} - {b.location}{hasManager ? ' (Managed)' : ''}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
                 <div className="mb-3">

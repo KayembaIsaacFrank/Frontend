@@ -72,10 +72,19 @@ const Login = () => {
                   {loading ? 'Logging in...' : 'Login'}
                 </button>
               </form>
-
-              <p className="text-center mt-3">
-                No account? <a href="/ceo-signup">CEO Signup</a>
-              </p>
+              <div className="text-center mt-3">
+                <div className="mb-1">No account?</div>
+                {role === '' && (
+                  <div className="d-flex flex-column gap-1">
+                    <a href="/ceo-signup">Sign up as CEO</a>
+                    <a href="/manager-signup">Sign up as Manager</a>
+                    <a href="/sales-agent-signup">Sign up as Sales Agent</a>
+                  </div>
+                )}
+                {role === 'CEO' && (<a href="/ceo-signup">Sign up as CEO</a>)}
+                {role === 'Manager' && (<a href="/manager-signup">Sign up as Manager</a>)}
+                {role === 'Sales Agent' && (<a href="/sales-agent-signup">Sign up as Sales Agent</a>)}
+              </div>
             </div>
           </div>
         </div>

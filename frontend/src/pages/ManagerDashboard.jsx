@@ -1,15 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import Navbar from '../components/Navbar';
 import api from '../utils/api';
 
 const ManagerDashboard = () => {
   const [analytics, setAnalytics] = useState(null);
   const [creditSales, setCreditSales] = useState([]);
+  const [agents, setAgents] = useState([]);
   const [approvalError, setApprovalError] = useState('');
   const [approvalSuccess, setApprovalSuccess] = useState('');
+  const [error, setError] = useState('');
+
+  const loadData = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const branchId = user?.branch_id;
+      
+      api.get('/analytics/branch').then(res => setAnalytics(res.data)).catch(() => setAnalytics(null));
+      api.get('/credit-sales?status=Pending').then(res => setCreditSales(res.data?.data || [])).catch(() => setCreditSales([]));
+      
+      if (branchId) {
+        const agentsRes = await api.get(`/users/agents/branch/${branchId}`);
+        setAgents(agentsRes.data || []);
+      }
+    } catch (err) {
+      console.error('Failed to load data:', err);
+    }
+  };
 
   useEffect(() => {
-    api.get('/analytics/branch').then(res => setAnalytics(res.data)).catch(() => setAnalytics(null));
-    api.get('/credit-sales?status=Pending').then(res => setCreditSales(res.data?.data || [])).catch(() => setCreditSales([]));
+    loadData();
   }, []);
 
   const handleApprove = async (saleId) => {
@@ -24,9 +43,23 @@ const ManagerDashboard = () => {
     }
   };
 
+  const handleRemoveAgent = async (agentId, agentName) => {
+    if (!window.confirm(`Remove sales agent ${agentName}?`)) return;
+    setError('');
+    try {
+      await api.delete(`/users/agents/${agentId}`);
+      await loadData();
+    } catch (err) {
+      setError(err?.response?.data?.error || 'Failed to remove sales agent');
+    }
+  };
+
   return (
-    <div className="container py-4">
-      <h2 className="mb-3">Manager Dashboard</h2>
+    <div>
+      <Navbar />
+      <div className="container py-4">
+        <h2 className="mb-3">Manager Dashboard</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
       <ul>
         <li>View branch analytics and KPIs</li>
         <li>Approve credit sales</li>
@@ -79,6 +112,46 @@ const ManagerDashboard = () => {
             </tbody>
           </table>
         )}
+      </div>
+
+      <div className="mt-4">
+        <h4>Sales Agents in My Branch</h4>
+        {agents.length === 0 ? (
+          <div>No sales agents in your branch yet.</div>
+        ) : (
+          <div className="table-responsive">
+            <table className="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {agents.map((agent, idx) => (
+                  <tr key={agent.id}>
+                    <td>{idx + 1}</td>
+                    <td>{agent.full_name}</td>
+                    <td>{agent.email}</td>
+                    <td>{agent.phone || '-'}</td>
+                    <td>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleRemoveAgent(agent.id, agent.full_name)}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
       </div>
     </div>
   );

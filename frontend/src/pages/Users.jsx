@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';
+import CreateAgentForm from '../components/CreateAgentForm';
 
 const Users = () => {
   const [managers, setManagers] = useState([]);
@@ -174,6 +175,16 @@ const Users = () => {
         </div>
 
         <div className="row g-4">
+          {/* CEO: Create Sales Agent */}
+          <div className="col-12 mb-4">
+            <div className="card">
+              <div className="card-header">Create Sales Agent</div>
+              <div className="card-body">
+                <CreateAgentForm branches={branches} agents={agents} onCreated={loadData} />
+              </div>
+            </div>
+          </div>
+
           <div className="col-12 col-lg-6">
             <div className="card">
               <div className="card-header">Managers</div>
@@ -225,11 +236,6 @@ const Users = () => {
             </div>
           </div>
 
-          {/* You can add agent creation form here if needed, with similar logic:
-              - Only show branches with <2 agents
-              - Disable button if limit reached
-              - Show a note if all branches have 2 agents
-          */}
           <div className="col-12 col-lg-6">
             <div className="card">
               <div className="card-header">Sales Agents</div>
@@ -277,7 +283,6 @@ const Users = () => {
                     </tbody>
                   </table>
                 </div>
-                {/* Show a note if all branches have 2 agents */}
                 {branches.length > 0 && branches.every(b => agents.filter(a => a.branch && a.branch.id === b.id).length >= 2) && (
                   <div className="text-danger small m-3">All branches already have two sales agents.</div>
                 )}

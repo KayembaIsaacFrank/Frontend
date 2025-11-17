@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import ManagerDashboard from './pages/ManagerDashboard';
+// import ManagerDashboard from './pages/ManagerDashboard';
 import SalesAgentDashboard from './pages/SalesAgentDashboard';
 
 // Pages
@@ -32,9 +32,7 @@ function RoleBasedDashboard() {
   const { user } = useAuth();
   if (!user) return <Dashboard />;
   switch (user.role) {
-    case 'manager':
-      return <ManagerDashboard />;
-    case 'sales_agent':
+    case 'Sales Agent':
       return <SalesAgentDashboard />;
     default:
       return <Dashboard />;
@@ -53,7 +51,6 @@ function App() {
           <Route path="/sales-agent-signup" element={<SalesAgentSignup />} />
           {/* <Route path="/buyer-signup" element={<BuyerSignup />} /> */}
           {/* <Route path="/login-buyer" element={<LoginBuyer />} /> */}
-          
           {/* Protected routes */}
           <Route
             path="/dashboard"
@@ -67,7 +64,7 @@ function App() {
           <Route
             path="/procurement"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRole="Sales Agent">
                 <Procurement />
               </ProtectedRoute>
             }
@@ -76,7 +73,7 @@ function App() {
           <Route
             path="/sales"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRole="Sales Agent">
                 <Sales />
               </ProtectedRoute>
             }
