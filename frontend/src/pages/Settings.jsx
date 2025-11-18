@@ -1,3 +1,35 @@
+/**
+ * Settings Page Component
+ * 
+ * Purpose: User settings and preferences management
+ * - Change password functionality
+ * - Theme toggle (light/dark mode)
+ * - User-specific customization
+ * 
+ * Features:
+ * - Change Password Form:
+ *   - Current password verification
+ *   - New password with confirmation
+ *   - Auto-logout after successful change
+ * 
+ * - Theme Toggle:
+ *   - Light/Dark mode switch
+ *   - Persisted to localStorage
+ *   - Applied via data-theme attribute on body
+ * 
+ * Data Flow:
+ * 1. Load current theme from localStorage on mount
+ * 2. Apply theme to document.body
+ * 3. On password change:
+ *    - PUT /auth/change-password
+ *    - Backend verifies current password
+ *    - Updates password hash
+ *    - Frontend logs out user (requires re-login)
+ * 4. On theme toggle:
+ *    - Update localStorage
+ *    - Update body data-theme attribute
+ */
+
 import React, { useState } from 'react';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';

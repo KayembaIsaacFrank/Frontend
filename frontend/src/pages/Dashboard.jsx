@@ -1,3 +1,33 @@
+/**
+ * Dashboard Page Component
+ * 
+ * Purpose: Role-based dashboard showing different views for CEO, Manager, and Sales Agent
+ * - CEO: Company-wide analytics, branch performance, top produce charts
+ * - Manager: Branch KPIs, sales agent performance, team management
+ * - Sales Agent: Welcome message with quick links
+ * 
+ * Features:
+ * - CEO Dashboard:
+ *   - Branch overview with sales and profit metrics
+ *   - Date range and branch filtering
+ *   - Bar chart: Branch sales vs profit comparison
+ *   - Pie chart: Top 5 produce by sales
+ *   - KPI cards: Total branches, sales, profit, top produce
+ * 
+ * - Manager Dashboard:
+ *   - Sales agents list for their branch
+ *   - Branch KPIs (sales, tonnage, cost, profit)
+ *   - Agent performance comparison table
+ *   - Sales trend line chart (30-day)
+ *   - Produce breakdown by type
+ * 
+ * Data Flow:
+ * 1. Detects user role from AuthContext
+ * 2. Fetches role-specific analytics from backend
+ * 3. Renders appropriate charts and tables
+ * 4. Supports filtering by date range and branch (CEO)
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
@@ -5,7 +35,7 @@ import api from '../utils/api';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line } from 'recharts';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user } = useAuth();  // Get current logged-in user
   const [branches, setBranches] = useState([]);
   const [agentForm, setAgentForm] = useState({ full_name: '', email: '', phone: '', password: '' });
   const [creating, setCreating] = useState(false);

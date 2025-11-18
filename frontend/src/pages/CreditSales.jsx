@@ -1,3 +1,37 @@
+/**
+ * Credit Sales Page Component
+ * 
+ * Purpose: Manage sales on credit with buyer tracking and payment management
+ * - Records sales where payment is deferred
+ * - Tracks buyer information and payment status
+ * - Monitors due dates and overdue payments
+ * 
+ * Features:
+ * - Form to record new credit sale (branch, produce, tonnage, price, due date)
+ * - Buyer information: existing buyer selection or new buyer details
+ * - Optional: buyer phone, location, national ID
+ * - Payment status tracking: Pending, Partial, Paid, Overdue
+ * - Filtering by branch and status
+ * - Table showing all credit sales with amounts due/paid
+ * 
+ * Business Rules:
+ * - Can link to existing buyer or create ad-hoc buyer record
+ * - Due date is required
+ * - Status auto-calculated based on payments and due date
+ * - Backend updates stock and creates credit_sales record
+ * 
+ * Data Flow:
+ * 1. Load branches, produce, buyers on mount
+ * 2. User fills credit sale form
+ * 3. POST to /credit-sales endpoint
+ * 4. Backend:
+ *    - Validates stock
+ *    - Creates credit_sales record
+ *    - Updates stock levels
+ *    - Links to buyer if selected
+ * 5. Refresh credit sales list with filters
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';

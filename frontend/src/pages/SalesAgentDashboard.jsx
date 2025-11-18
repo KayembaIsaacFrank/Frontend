@@ -1,3 +1,59 @@
+/**
+ * Sales Agent Dashboard Component
+ * 
+ * Purpose: All-in-one dashboard for sales agents with tabbed interface
+ * - Combines procurement, sales, credit sales, and stock viewing
+ * - Tab-based navigation for different functions
+ * - Auto-filtered to agent's assigned branch
+ * 
+ * Tabs:
+ * 1. Overview: Quick stats and recent activity summary
+ * 2. Procurement: Record new stock purchases
+ * 3. Sales: Record regular sales transactions
+ * 4. Credit Sales: Record credit sales with buyer tracking
+ * 5. Stock: View current inventory levels
+ * 
+ * Features:
+ * - Overview Tab:
+ *   - Quick stats cards (stock items, recent sales count, etc.)
+ *   - Recent sales table
+ *   - Recent procurements table
+ *   - Recent credit sales table
+ * 
+ * - Procurement Tab:
+ *   - Form to record procurement (produce, tonnage, prices, source)
+ *   - Allowed produce types and sources enforced
+ *   - Minimum 1 ton validation
+ *   - List of agent's procurements
+ * 
+ * - Sales Tab:
+ *   - Form to record sale (produce, buyer, tonnage, price, payment status)
+ *   - Payment status: Paid or Credit
+ *   - List of agent's sales
+ * 
+ * - Credit Sales Tab:
+ *   - Form to record credit sale (produce, buyer details, due date)
+ *   - Optional buyer selection from existing buyers
+ *   - List of agent's credit sales
+ * 
+ * - Stock Tab:
+ *   - Read-only view of current stock levels
+ *   - Shows branch's inventory
+ * 
+ * Business Rules:
+ * - All operations auto-scoped to agent's branch (user.branch_id)
+ * - Procurement: only allowed produce types, minimum 1 ton
+ * - Sales: validates stock availability
+ * - Credit Sales: requires due date
+ * 
+ * Data Flow:
+ * 1. Load branches, produce, buyers on mount
+ * 2. Load branch-specific data (stock, sales, procurements, credit sales)
+ * 3. On form submit: POST to respective endpoint with branch_id = user.branch_id
+ * 4. Reload relevant data after successful submission
+ * 5. Tab switching shows different views without reload
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';

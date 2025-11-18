@@ -1,3 +1,23 @@
+/**
+ * Unauthorized Page Component
+ * 
+ * Purpose: Error page shown when user tries to access route they don't have permission for
+ * - Displayed by ProtectedRoute when user lacks required role
+ * - Simple centered error message
+ * - Link back to dashboard
+ * 
+ * Usage:
+ * - CEO tries to access sales agent-only route
+ * - Manager tries to access CEO-only route
+ * - Sales agent tries to access manager-only route
+ * 
+ * Features:
+ * - Full viewport height centering
+ * - Large error heading
+ * - Explanatory message
+ * - Button to return to dashboard
+ */
+
 import React from 'react';
 
 const Unauthorized = () => {

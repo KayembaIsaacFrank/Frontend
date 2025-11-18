@@ -1,3 +1,37 @@
+/**
+ * Reports Page Component
+ * 
+ * Purpose: Generate and download sales reports in multiple formats
+ * - Export sales data as CSV, Excel (XLSX), or PDF
+ * - Filter reports by branch, agent, date range
+ * - Download files directly to user's computer
+ * 
+ * Features:
+ * - Filter Options:
+ *   - Branch selection (loads agents for that branch)
+ *   - Agent selection (dependent on branch)
+ *   - Date range (from/to dates)
+ * - Export Formats:
+ *   - CSV: Plain text spreadsheet
+ *   - XLSX: Excel file with formatting
+ *   - PDF: Formatted document
+ * - Download buttons trigger file generation
+ * 
+ * Data Flow:
+ * 1. Load branches on mount
+ * 2. When branch selected: load agents for that branch
+ * 3. User selects filters and clicks download button
+ * 4. GET /reports/sales/{format} with query params
+ * 5. Backend generates file with filters applied
+ * 6. Browser downloads file (responseType: 'blob')
+ * 7. Create temporary URL and trigger download
+ * 
+ * Backend Endpoints:
+ * - GET /reports/sales/csv
+ * - GET /reports/sales/xlsx
+ * - GET /reports/sales/pdf
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';

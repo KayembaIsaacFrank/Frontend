@@ -1,3 +1,46 @@
+/**
+ * Users Page Component (CEO Only)
+ * 
+ * Purpose: User management interface for CEO to create and manage managers and sales agents
+ * - Create new managers with branch assignment
+ * - Create new sales agents with branch assignment
+ * - View all managers and agents in tables
+ * - Remove users with confirmation
+ * 
+ * Features:
+ * - Create Manager Form:
+ *   - Full name, email, phone, password fields
+ *   - Branch selection (only branches without managers shown)
+ *   - Password confirmation validation
+ *   - Enforces 1 manager per branch rule
+ * 
+ * - Create Sales Agent Form:
+ *   - Uses CreateAgentForm component
+ *   - Branch selection (only branches with <2 agents)
+ *   - Enforces max 2 agents per branch rule
+ * 
+ * - Managers Table:
+ *   - Displays all managers with branch assignments
+ *   - Remove button with confirmation
+ * 
+ * - Sales Agents Table:
+ *   - Displays all agents with branch assignments
+ *   - Remove button with confirmation
+ * 
+ * Business Rules:
+ * - ONE manager per branch maximum
+ * - TWO sales agents per branch maximum
+ * - Branches shown as disabled if at capacity
+ * - Warnings displayed when all branches are full
+ * 
+ * Data Flow:
+ * 1. Load managers, agents, branches on mount
+ * 2. Filter branches based on capacity rules
+ * 3. On create: POST to /auth/create-manager or /auth/agent-signup
+ * 4. On remove: DELETE /users/managers/:id or /users/agents/:id
+ * 5. Reload data after successful operations
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';

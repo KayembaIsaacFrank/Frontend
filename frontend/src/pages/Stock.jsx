@@ -1,3 +1,26 @@
+/**
+ * Stock Page Component
+ * 
+ * Purpose: View current inventory levels across all branches
+ * - Read-only display of stock quantities
+ * - Filter by branch or view all branches
+ * - Shows current tonnage and last update timestamp
+ * 
+ * Features:
+ * - Table showing all stock records
+ * - Branch filter dropdown
+ * - Refresh button to reload data
+ * - Displays: branch name, produce type, current tonnage, last updated
+ * 
+ * Data Flow:
+ * 1. Load branches on mount
+ * 2. GET /stock endpoint (with optional branch_id filter)
+ * 3. Display stock records in table
+ * 4. Stock levels auto-updated by procurement and sales transactions
+ *
+ * Note: This is view-only - stock is modified through Procurement and Sales pages
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';

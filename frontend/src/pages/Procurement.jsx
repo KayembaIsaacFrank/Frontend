@@ -1,3 +1,33 @@
+/**
+ * Procurement Page Component
+ * 
+ * Purpose: Record produce purchases from dealers and farms
+ * - Tracks stock incoming to branches
+ * - Enforces business rules on allowed produce types and sources
+ * - Records cost and selling prices for profit tracking
+ * 
+ * Features:
+ * - Form to record new procurement (branch, produce, tonnage, prices, source)
+ * - Allowed produce: beans, grain maize, cowpeas, groundnuts, rice, soybeans
+ * - Allowed sources: Individual Dealer, Company, Maganjo Farm, Matugga Farm
+ * - Minimum 1 ton per procurement
+ * - Table showing recent procurements with filtering
+ * 
+ * Business Rules:
+ * - Only specific produce types allowed (whitelisted)
+ * - Minimum 1 ton procurement
+ * - Must select from allowed sources
+ * - Backend updates stock levels automatically
+ * 
+ * Data Flow:
+ * 1. Load branches and produce types on mount
+ * 2. User fills procurement form
+ * 3. Frontend validates produce type, tonnage, source
+ * 4. POST to /procurement endpoint
+ * 5. Backend creates procurement record and updates stock
+ * 6. Refresh procurement list
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';

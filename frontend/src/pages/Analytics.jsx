@@ -1,3 +1,37 @@
+/**
+ * Analytics Page Component
+ * 
+ * Purpose: Visual analytics dashboard with charts and KPIs
+ * - Sales trend analysis over time
+ * - Produce breakdown by type
+ * - KPI cards showing key metrics
+ * - Filtering by branch and date range
+ * 
+ * Features:
+ * - KPI Cards: Total Sales, Tonnage Sold, Procurement Cost, Estimated Profit
+ * - Line Chart: Daily sales trend (30 days)
+ * - Bar Chart: Produce breakdown by sales amount
+ * - Pie Chart: Produce share visualization
+ * - CEO: Can filter by all branches
+ * - Manager/Agent: Auto-filtered to their branch
+ * - Date range filtering
+ * 
+ * Charts Used:
+ * - Recharts library for all visualizations
+ * - LineChart: Sales and tonnage trend over time
+ * - BarChart: Produce comparison
+ * - PieChart: Produce distribution
+ * 
+ * Data Flow:
+ * 1. Load branches based on user role
+ * 2. Fetch analytics data from multiple endpoints:
+ *    - GET /analytics (KPIs)
+ *    - GET /analytics/sales-trend (30-day trend)
+ *    - GET /analytics/produce-breakdown (produce stats)
+ * 3. Render charts with filtered data
+ * 4. Apply filters triggers data reload
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';

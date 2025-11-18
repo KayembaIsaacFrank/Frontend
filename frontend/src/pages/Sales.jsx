@@ -1,3 +1,35 @@
+/**
+ * Sales Page Component
+ * 
+ * Purpose: Record produce sales to buyers
+ * - Tracks outgoing stock from branches
+ * - Records both cash (Paid) and credit sales
+ * - Updates stock levels automatically
+ * 
+ * Features:
+ * - Form to record new sale (branch, produce, tonnage, price, payment status)
+ * - Payment status: Paid or Credit
+ * - Optional buyer information (name, phone)
+ * - Table showing recent sales with filtering
+ * - Refresh button to reload data
+ * 
+ * Business Rules:
+ * - Sales automatically deduct from stock
+ * - Credit sales create credit_sales record
+ * - Backend validates sufficient stock availability
+ * 
+ * Data Flow:
+ * 1. Load branches and produce types on mount
+ * 2. User fills sales form
+ * 3. POST to /sales endpoint
+ * 4. Backend:
+ *    - Validates stock availability
+ *    - Creates sales record
+ *    - Updates stock levels
+ *    - If Credit: creates credit_sales entry
+ * 5. Refresh sales list
+ */
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';
